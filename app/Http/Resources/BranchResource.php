@@ -23,7 +23,7 @@ class BranchResource extends JsonResource
             ],
             'quantity' => $this->quantity,
             'price' => $this->price,
-            'summ' => $this->quantity * $this->price,
+            'summ' => $this->summ,
         ];
     }
 }
