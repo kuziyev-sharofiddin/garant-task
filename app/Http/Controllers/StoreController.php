@@ -30,20 +30,16 @@ class StoreController extends Controller
         $this->service->insert($params);
         $stores = $this->service->getPaginate(10);
 
-        return response()->json([
-            'stores' => $stores,
+        return [
+            'stores' => StoreResource::collection($stores)->toArray(request()),
             'message' => 'Data successfully saved.'
-        ], 201);
+        ];
     }
 
     public function show($id)
     {
         $store = $this->service->show($id);
-
-        if (!$store) {
-            return response()->json(['message' => 'Store not found.'], 404);
-        }
-        return response()->json($store);
+        return (new StoreResource($store))->toArray(request());
     }
 
     public function edit($id)
@@ -55,12 +51,15 @@ class StoreController extends Controller
     {
         $params = $request->validated();
         $store = $this->service->edit($params,$id);
-        return response()->json(['message' => 'Store updated successfully.', 'store' => $store]);
+        return [
+            'message' => 'Store updated successfully.',
+            'store' => (new StoreResource($store))->toArray(request())
+        ];
     }
 
     public function destroy($id)
     {
         $this->service->delete($id);
-        return response()->json(['message' => 'Store deleted successfully.']);
+        return 'Store deleted successfully.';
     }
 }

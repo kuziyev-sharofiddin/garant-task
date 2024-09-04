@@ -27,17 +27,16 @@ class CategoryController extends Controller
     {
         $params = $request->validated();
         $category = $this->service->create($params);
-        return response()->json(['message' => 'Category created successfully.', 'category' => $category], 201);
+        return [
+            'message' => 'Category created successfully.',
+            'category' => (new CategoryResource($category))->toArray(request())
+        ];
     }
 
     public function show($id)
     {
         $category = $this->service->show($id);
-
-        if (!$category) {
-            return response()->json(['message' => 'Category not found.'], 404);
-        }
-        return response()->json($category);
+        return (new CategoryResource($category))->toArray(request());
     }
 
     public function edit($id)
@@ -50,12 +49,15 @@ class CategoryController extends Controller
         $params = $request->validated();
         $category = $this->service->edit($params,$id);
 
-        return response()->json(['message' => 'Category updated successfully.', 'category' => $category]);
+        return [
+            'message' => 'Category updated successfully.',
+            'category' => (new CategoryResource($category))->toArray(request())
+        ];
     }
 
     public function destroy($id)
     {
         $this->service->delete($id);
-        return response()->json(['message' => 'Category deleted successfully.']);
+        return 'Category deleted successfully.';
     }
 }

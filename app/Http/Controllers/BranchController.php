@@ -28,17 +28,16 @@ class BranchController extends Controller
     {
         $params = $request->validated();
         $branch = $this->service->create($params);
-        return response()->json(['message' => 'Branch created successfully.', 'branch' => $branch], 201);
+        return [
+            'message' => 'Branch created successfully.',
+            'branch' => (new BranchResource($branch))->toArray(request())
+        ];
     }
 
     public function show($id)
     {
         $branch = $this->service->show($id);
-
-        if (!$branch) {
-            return response()->json(['message' => 'Branch not found.'], 404);
-        }
-        return response()->json($branch);
+        return (new BranchResource($branch))->toArray(request());
     }
 
     public function edit($id)
@@ -50,13 +49,16 @@ class BranchController extends Controller
     {
         $params = $request->validated();
         $branch = $this->service->edit($params,$id);
-        return response()->json(['message' => 'Branch updated successfully.', 'branch' => $branch]);
+        return [
+            'message' => 'Branch updated successfully.',
+            'branch' => (new BranchResource($branch))->toArray(request())
+        ];
     }
 
     public function destroy($id)
     {
         $this->service->delete($id);
-        return response()->json(['message' => 'Branch deleted successfully.']);
+        return 'Branch deleted successfully.';
     }
 }
 

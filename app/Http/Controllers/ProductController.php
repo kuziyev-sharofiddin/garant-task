@@ -27,17 +27,17 @@ class ProductController extends Controller
     {
         $params = $request->validated();
         $product = $this->service->create($params);
-        return response()->json(['message' => 'Product created successfully.', 'product' => $product], 201);
+        return
+            [
+                'message' => 'Product created successfully.',
+                'product' => (new ProductResource($product))->toArray(request())
+            ];
     }
 
     public function show($id)
     {
         $product = $this->service->show($id);
-
-        if (!$product) {
-            return response()->json(['message' => 'Product not found.'], 404);
-        }
-        return response()->json($product);
+        return (new ProductResource($product))->toArray(request());
     }
 
     public function edit($id)
@@ -49,12 +49,15 @@ class ProductController extends Controller
     {
         $params = $request->validated();
         $product = $this->service->edit($params,$id);
-        return response()->json(['message' => 'Product updated successfully.', 'product' => $product]);
+        return response()->json([
+            'message' => 'Product updated successfully.',
+            'product' => (new ProductResource($product))->toArray(request())
+        ]);
     }
 
     public function destroy($id)
     {
         $this->service->delete($id);
-        return response()->json(['message' => 'Product deleted successfully.']);
+        return 'Product deleted successfully.';
     }
 }
