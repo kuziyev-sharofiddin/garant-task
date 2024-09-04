@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRequest;
+use App\Http\Resources\StoreResource;
 use App\Services\StoreService;
 
 class StoreController extends Controller
@@ -15,7 +16,7 @@ class StoreController extends Controller
     public function index()
     {
         $stores = $this->service->getPaginate(10);
-        return response()->json($stores);
+        return StoreResource::collection($stores)->toArray(request());
     }
 
     public function create()

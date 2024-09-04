@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
+use App\Http\Resources\ProductResource;
 use App\Services\ProductService;
 
 class ProductController extends Controller
@@ -14,7 +15,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = $this->service->getPaginate(10);
-        return response()->json($products);
+        return ProductResource::collection($products)->toArray(request());
     }
 
     public function create()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Services\CategoryService;
 
 class CategoryController extends Controller
@@ -14,7 +15,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = $this->service->getPaginate(10);
-        return response()->json($categories);
+        return CategoryResource::collection($categories)->toArray(request());
     }
 
     public function create()

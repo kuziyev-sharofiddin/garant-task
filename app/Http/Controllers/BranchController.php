@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BranchRequest;
+use App\Http\Resources\BranchResource;
 use App\Services\BranchService;
 
 class BranchController extends Controller
@@ -15,7 +16,7 @@ class BranchController extends Controller
     public function index()
     {
         $branches = $this->service->getPaginate(10);
-        return response()->json($branches);
+        return BranchResource::collection($branches)->toArray(request());
     }
 
     public function create()
@@ -58,3 +59,4 @@ class BranchController extends Controller
         return response()->json(['message' => 'Branch deleted successfully.']);
     }
 }
+
